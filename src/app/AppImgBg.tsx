@@ -9,6 +9,7 @@ export default function AppBgImg() {
         fill
         sizes="100vw"
         style={{
+            backgroundSize: 'cover',
             objectFit: 'cover',
             zIndex: -1
         }}
