@@ -7,6 +7,49 @@ import Image from "next/image";
 import appleLogo from "@/public/os_logo/apple.svg"
 import windowsLogo from "@/public/os_logo/windows.svg"
 import linuxLogo from "@/public/os_logo/linux.png"
+import {release} from "node:os";
+import {object} from "prop-types";
+
+function GetLatestRelease(org_name: string, repo_name: string): { mac: string, win: string, linux: string } {
+    const [data, setData] = useState()
+    let releases = {mac: "", win: "", linux: ""}
+
+    useEffect(() => {
+        const token: string = process.env.NEXT_PUBLIC_SECRET_KEY == undefined ? "" : process.env.NEXT_PUBLIC_SECRET_KEY;
+        fetch(`https://api.github.com/repos/${org_name}/${repo_name}/releases`, {
+            method: "GET",
+            headers: {
+                "Authorization" : token
+            }
+
+        })
+            .then((res) => res.ok ? res.json() : null)
+            .then((data) => {
+                setData(data)
+            })
+    }, [])
+    if (data) {
+        const release = data[data.length - 1]
+        console.log(release)
+        for (let asset in release.assets) {
+            asset = release.assets[asset]
+            console.log(asset)
+            if (asset.name.includes("Linux")) {
+                releases.linux = asset.browser_download_url
+            } else if (asset.name.includes("dmg")) {
+                releases.mac = asset.browser_download_url
+            } else if (asset.name.includes("Windows")) {
+                releases.win = asset.browser_download_url
+            }
+        }
+        ;
+    } else {
+        releases.mac = downloadLinksConfig.mac
+        releases.win = downloadLinksConfig.win
+        releases.linux = downloadLinksConfig.linux
+    }
+    return releases
+}
 
 
 function RecommandedDownload() {
@@ -19,28 +62,32 @@ function RecommandedDownload() {
     
     let os: string;
     let setOs: any;
-    
-    [os, setOs ] = useState('Null');
+
+
+    [os, setOs] = useState('Null');
     
     useEffect(() => {
         setOs(getOs())
     }, []);
 
+    let releases: { mac: string; win: string; linux: string };
+    releases = GetLatestRelease("GameWaves", "OutOfTheHole")
+
     switch (os) {
         case 'Win32':
-            downloadLink = downloadLinksConfig.win
+            downloadLink = releases.win
             osFriendly = "Windows";
             break;
         case 'MacIntel':
-            downloadLink = downloadLinksConfig.mac
+            downloadLink = releases.mac
             osFriendly = "MacOS";
             break;
         case 'X11':
-            downloadLink = downloadLinksConfig.linux
+            downloadLink = releases.linux
             osFriendly = "Linux";
             break;
         case 'Linux':
-            downloadLink = downloadLinksConfig.linux
+            downloadLink = releases.linux
             osFriendly = "Linux";
             break;
         default:
@@ -69,22 +116,25 @@ function OsWidget(os: string){
     let link;
     
     let size:number = 200;
+
+    let releases: { mac: string; win: string; linux: string };
+    releases = GetLatestRelease("GameWaves", "OutOfTheHole")
     
     switch (os){
         case "MacOs":
             image = appleLogo;
             ostext = "One must believe that there are games for Mac."
-            link = downloadLinksConfig["mac"]
+            link = releases.mac
             break
         case "Windows":
             image = windowsLogo;
             ostext = "A game better coded than the OS. Sorry Microsoft."
-            link = downloadLinksConfig["win"]
+            link = releases.win
             break
         case "Linux":
             image = linuxLogo;
             ostext = "Warning to bearded men, we are thinking of you."
-            link = downloadLinksConfig["linux"]
+            link = releases.linux
             break
         default:
             ostext = ""

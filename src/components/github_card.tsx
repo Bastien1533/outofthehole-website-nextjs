@@ -42,7 +42,7 @@ interface GitHubProfile {
 export function GithubRepoCard(org_name:string,  repo_name:string){
     const [data, setData] = useState(null)
     const [isLoading, setLoading] = useState(true)
-    const token:string = process.env.SECRET_KEY==undefined?"":process.env.SECRET_KEY;
+    const token: string = process.env.NEXT_PUBLIC_SECRET_KEY == undefined ? "" : process.env.NEXT_PUBLIC_SECRET_KEY;
 
     const ReqHeaders = new Headers()
     if (token != null){
@@ -83,7 +83,7 @@ export function GithubRepoCard(org_name:string,  repo_name:string){
 export function GithubCard(name:string, gh_name: string) {
     const [data, setData] = useState(null)
     const [isLoading, setLoading] = useState(true)
-    const token:string = process.env.SECRET_KEY==undefined?"":process.env.SECRET_KEY;
+    const token: string = process.env.NEXT_PUBLIC_SECRET_KEY == undefined ? "" : process.env.NEXT_PUBLIC_SECRET_KEY;
     
     
     useEffect(() => {
