@@ -29,7 +29,7 @@ function GetLatestRelease(org_name: string, repo_name: string): { mac: string, w
             })
     }, [])
     if (data) {
-        const release = data[data.length - 1]
+        const release = data[0]
         console.log(release)
         for (let asset in release.assets) {
             asset = release.assets[asset]

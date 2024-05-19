@@ -1,9 +1,14 @@
 # Out of The Hole NextJs Website 
 
-(WIP) You can create a `.env.local` file with a `SECRET_KEY` field in order to bypass github's api rate limiting.
+You can create a `.env.local` file with a `SECRET_KEY` field in order to bypass github's api rate limiting.
 
 
 ## Getting Started
+
+Install the deps:
+```bash
+npm -i
+```
 
 First, run the development server:
 
