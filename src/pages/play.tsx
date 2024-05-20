@@ -7,52 +7,52 @@ import Image from "next/image";
 import appleLogo from "@/public/os_logo/apple.svg"
 import windowsLogo from "@/public/os_logo/windows.svg"
 import linuxLogo from "@/public/os_logo/linux.png"
-import {release} from "node:os";
-import {object} from "prop-types";
+import type { InferGetServerSidePropsType, GetServerSideProps } from 'next'
+import {RepoRelease, Release, ReleaseAsset} from "@/models/github";
 
-function GetLatestRelease(org_name: string, repo_name: string): { mac: string, win: string, linux: string } {
-    const [data, setData] = useState()
-    let releases = {mac: "", win: "", linux: ""}
 
-    useEffect(() => {
-        const token: string = process.env.NEXT_PUBLIC_SECRET_KEY == undefined ? "" : process.env.NEXT_PUBLIC_SECRET_KEY;
-        fetch(`https://api.github.com/repos/${org_name}/${repo_name}/releases`, {
-            method: "GET",
-            headers: {
-                "Authorization" : token
-            }
+export const getServerSideProps = (async () => {
+    
+    const token: string = process.env.NEXT_PUBLIC_SECRET_KEY == undefined ? "" : process.env.NEXT_PUBLIC_SECRET_KEY;
+    const org_name = process.env.NEXT_PUBLIC_ORG_NAME;
+    const repo_name = process.env.NEXT_PUBLIC_REPO_NAME;
+    const res = await fetch(`https://api.github.com/repos/${org_name}/${repo_name}/releases`, {
+        method: "GET",
+        headers: {
+            "Authorization" : `Bearer ${token}`
+        }})
+    const releases: RepoRelease = await res.json()
+    // Pass data to the page via props
+    return { props: { releases } }
+}) satisfies GetServerSideProps<{ releases: RepoRelease }>
 
-        })
-            .then((res) => res.ok ? res.json() : null)
-            .then((data) => {
-                setData(data)
-            })
-    }, [])
-    if (data) {
-        const release = data[data.length - 1]
-        console.log(release)
-        for (let asset in release.assets) {
-            asset = release.assets[asset]
-            console.log(asset)
+export function GetLatestRelease({releases, }: InferGetServerSidePropsType<typeof getServerSideProps>) : { mac: string; win: string; linux: string } {
+    //const [data, setData] = useState()
+    let release_platform = {mac: "", win: "", linux: ""}
+    
+    if (releases) {
+        const release = releases[0] as Release
+        for (let index in release.assets) {
+            let asset = release.assets[index] as ReleaseAsset;
             if (asset.name.includes("Linux")) {
-                releases.linux = asset.browser_download_url
+                release_platform.linux = asset.browser_download_url
             } else if (asset.name.includes("dmg")) {
-                releases.mac = asset.browser_download_url
+                release_platform.mac = asset.browser_download_url
             } else if (asset.name.includes("Windows")) {
-                releases.win = asset.browser_download_url
+                release_platform.win = asset.browser_download_url
             }
         }
-        ;
+        
     } else {
-        releases.mac = downloadLinksConfig.mac
-        releases.win = downloadLinksConfig.win
-        releases.linux = downloadLinksConfig.linux
+        release_platform.mac = downloadLinksConfig.mac
+        release_platform.win = downloadLinksConfig.win
+        release_platform.linux = downloadLinksConfig.linux
     }
-    return releases
+    return release_platform
 }
 
 
-function RecommandedDownload() {
+function RecommandedDownload({releases,} : InferGetServerSidePropsType<typeof getServerSideProps>) {
     // Show the good os download link based on the user's os
     let downloadLink: string;
     let osFriendly:string;
@@ -70,24 +70,23 @@ function RecommandedDownload() {
         setOs(getOs())
     }, []);
 
-    let releases: { mac: string; win: string; linux: string };
-    releases = GetLatestRelease("GameWaves", "OutOfTheHole")
+    let release_platform = GetLatestRelease({releases})
 
     switch (os) {
         case 'Win32':
-            downloadLink = releases.win
+            downloadLink = release_platform.win
             osFriendly = "Windows";
             break;
         case 'MacIntel':
-            downloadLink = releases.mac
+            downloadLink = release_platform.mac
             osFriendly = "MacOS";
             break;
         case 'X11':
-            downloadLink = releases.linux
+            downloadLink = release_platform.linux
             osFriendly = "Linux";
             break;
         case 'Linux':
-            downloadLink = releases.linux
+            downloadLink = release_platform.linux
             osFriendly = "Linux";
             break;
         default:
@@ -110,31 +109,31 @@ function RecommandedDownload() {
     ;
 }
 
-function OsWidget(os: string){
+function OsWidget(os: string, {releases,} : InferGetServerSidePropsType<typeof getServerSideProps>){
     let image;
     let ostext;
     let link;
     
     let size:number = 200;
 
-    let releases: { mac: string; win: string; linux: string };
-    releases = GetLatestRelease("GameWaves", "OutOfTheHole")
+    let release_platform: { mac: string; win: string; linux: string };
+    release_platform = GetLatestRelease({releases})
     
     switch (os){
         case "MacOs":
             image = appleLogo;
             ostext = "One must believe that there are games for Mac."
-            link = releases.mac
+            link = release_platform.mac
             break
         case "Windows":
             image = windowsLogo;
             ostext = "A game better coded than the OS. Sorry Microsoft."
-            link = releases.win
+            link = release_platform.win
             break
         case "Linux":
             image = linuxLogo;
             ostext = "Warning to bearded men, we are thinking of you."
-            link = releases.linux
+            link = release_platform.linux
             break
         default:
             ostext = ""
@@ -151,18 +150,20 @@ function OsWidget(os: string){
     )
 }
 
-export default function TeamPage() {
+
+
+export default function TeamPage({releases,} : InferGetServerSidePropsType<typeof getServerSideProps>) {
     return <PageLayout>
         <div className={"flex flex-col gap-10"}>
                     <div className={"flex flex-col  gap-7 items-center"}>
                         <span className={"text-oth_yellow text-7xl mt-16"}>Ready to Play ?</span>
-                        {RecommandedDownload()}
+                        {RecommandedDownload({releases})}
                     </div>
                 <div className={"h-screen"}>
                     <div className={"flex justify-evenly bg-background w-screen h-full pb-48"}>
-                        {OsWidget("MacOs")}
-                        {OsWidget("Windows")}
-                        {OsWidget("Linux")}
+                        {OsWidget("MacOs", {releases})}
+                        {OsWidget("Windows", {releases})}
+                        {OsWidget("Linux", {releases})}
                     </div>
                 </div>
         </div>
@@ -178,6 +179,5 @@ const getOs = () => {
     if (platform.includes("linux") || platform.includes("Linux") || platform.includes("X11")) {
         platform = "Linux";
     }
-    console.log("Hey, I'm running on ", platform);
     return platform;
 }
