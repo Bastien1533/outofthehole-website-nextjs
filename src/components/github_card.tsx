@@ -15,7 +15,7 @@ export function GithubRepoCard(org_name:string,  repo_name:string){
         fetch(`https://api.github.com/repos/${org_name}/${repo_name}`, {
             method: "GET",
             headers:  {
-                "Authorization": `Bearer ${token}`,
+                "Authorization": `${token==""?"":"Bearer"} ${token}`, // if the key is not present, Bearer should be removed.
             }
         })
             .then((res) => res.json())
@@ -34,7 +34,7 @@ export function GithubRepoCard(org_name:string,  repo_name:string){
                     <Image src={GithubCatWhite} alt={"github"} width={40} height={40} className={""}/>
                     <div className={"flex flex-col"}>
                         <span className={"font-medium"}>{parsed_data.full_name}</span>
-                        <span className={"opacity-80 font-normal"}>{parsed_data.description}</span>
+                        <span className={"opacity-80 font-normal overflow-clip"}>{parsed_data.description}</span>
                     </div>
                 </div>
             </a>

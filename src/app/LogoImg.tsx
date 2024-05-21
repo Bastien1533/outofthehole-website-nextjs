@@ -1,6 +1,6 @@
 import Image from "next/image";
 import bgImage from "@/public/bg.png"
-import logo from "@/public/OOTH_logo.png";
+import logo from "@/public/OOTH_logo2.png";
 
 export default function LogoImg(width: number, height: number) {
     return <Image

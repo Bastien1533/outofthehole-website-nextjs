@@ -15,7 +15,7 @@ export const getServerSideProps = (async () => {
         const res = await fetch(`https://api.github.com/users/${team[member]}`, {
             method: "GET",
             headers: {
-                "Authorization" : `Bearer ${token}`
+                "Authorization": `${token==""?"":"Bearer"} ${token}`, // if the key is not present, Bearer should be removed.
             }});
         (team_data_dict as any)[team[member]] = await res.json()
     }

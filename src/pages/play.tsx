@@ -19,9 +19,11 @@ export const getServerSideProps = (async () => {
     const res = await fetch(`https://api.github.com/repos/${org_name}/${repo_name}/releases`, {
         method: "GET",
         headers: {
-            "Authorization" : `Bearer ${token}`
+            "Authorization": `${token==""?"":"Bearer"} ${token}`, // if the key is not present, Bearer should be removed.
         }})
-    const releases: RepoRelease = await res.json()
+    const json_releases = await res.json()
+    const releases: RepoRelease = json_releases
+    console.log(json_releases)
     // Pass data to the page via props
     return { props: { releases } }
 }) satisfies GetServerSideProps<{ releases: RepoRelease }>

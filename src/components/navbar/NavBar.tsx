@@ -7,6 +7,8 @@ import Link from "next/link";
 import {GithubRepoCard} from "@/components/github_card";
 
 export default function NavBar() {
+    const org_name = process.env.NEXT_PUBLIC_ORG_NAME==undefined?"GameWaves":process.env.NEXT_PUBLIC_ORG_NAME
+    const repo_name = process.env.NEXT_PUBLIC_REPO_NAME==undefined?"OutofTheHole":process.env.NEXT_PUBLIC_REPO_NAME
     return <div className={"flex justify-between items-center px-2 w-screen bg-background"}>
                 <NavigationMenu className="w-full py-2">
                     <NavigationMenuList className="flex gap-7 ml-2">
@@ -26,7 +28,7 @@ export default function NavBar() {
                         </NavigationMenuItem>
                     </NavigationMenuList>
                 </NavigationMenu>
-        {GithubRepoCard("Gamewaves", "OutOfTheHole")}
+        {GithubRepoCard(org_name, repo_name)}
                 
     </div>
 }
