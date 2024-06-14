@@ -19,7 +19,7 @@ export default function NavBar() {
     const repo_name = process.env.NEXT_PUBLIC_REPO_NAME==undefined?"OutofTheHole":process.env.NEXT_PUBLIC_REPO_NAME
     return <div className={"flex max-sm:flex-col justify-between items-center px-2 w-screen bg-background"}>
                 <div className={"flex items-center w-full max-sm:justify-evenly justify-between"}>
-                    <NavigationMenu className="w-full py-2 bg-red-950">
+                    <NavigationMenu className="w-full py-2">
                         <NavigationMenuList className="flex gap-7 ml-2">
                             <NavigationMenuItem>
                                 <Link href={"/"} legacyBehavior passHref>
