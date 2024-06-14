@@ -31,4 +31,4 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: ghcr.io/GameWaves/website-nextjs:latest
+          tags: ghcr.io/gamewaves/website-nextjs:latest
