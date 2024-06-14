@@ -26,4 +26,4 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
-          tags: GameWaves/website-nextjs:staging
+          tags: ghcr.io/GameWaves/website-nextjs:staging
