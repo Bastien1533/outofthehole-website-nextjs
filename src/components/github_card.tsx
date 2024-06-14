@@ -32,7 +32,7 @@ export function GithubRepoCard(org_name:string,  repo_name:string){
             <a href={parsed_data.html_url}>
                 <div className={"flex justify-between items-center px-2 text-white mr-5 gap-2"}>
                     <Image src={GithubCatWhite} alt={"github"} width={40} height={40} className={""}/>
-                    <div className={"flex flex-col"}>
+                    <div className={"flex flex-col max-lg:hidden"}>
                         <span className={"font-medium"}>{parsed_data.full_name}</span>
                         <span className={"opacity-80 font-normal overflow-clip"}>{parsed_data.description}</span>
                     </div>

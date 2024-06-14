@@ -23,7 +23,7 @@ export const getServerSideProps = (async () => {
         }})
     const json_releases = await res.json()
     const releases: RepoRelease = json_releases
-    console.log(json_releases)
+    //console.log(json_releases)
     // Pass data to the page via props
     return { props: { releases } }
 }) satisfies GetServerSideProps<{ releases: RepoRelease }>
@@ -34,6 +34,7 @@ export function GetLatestRelease({releases, }: InferGetServerSidePropsType<typeo
     
     if (releases) {
         const release = releases[0] as Release
+        //console.log(release)
         for (let index in release.assets) {
             let asset = release.assets[index] as ReleaseAsset;
             if (asset.name.includes("Linux")) {
@@ -157,12 +158,12 @@ function OsWidget(os: string, {releases,} : InferGetServerSidePropsType<typeof g
 export default function TeamPage({releases,} : InferGetServerSidePropsType<typeof getServerSideProps>) {
     return <PageLayout>
         <div className={"flex flex-col gap-10"}>
-                    <div className={"flex flex-col  gap-7 items-center"}>
-                        <span className={"text-oth_yellow text-7xl mt-16"}>Ready to Play ?</span>
+                    <div className={"flex flex-col  gap-7 items-center mx-5"}>
+                        <span className={"text-oth_yellow text-7xl mt-16 text-center"}>Ready to Play ?</span>
                         {RecommandedDownload({releases})}
                     </div>
                 <div className={"h-screen"}>
-                    <div className={"flex justify-evenly bg-background w-screen h-full pb-48"}>
+                    <div className={"grid max-sm:grid-cols-1 grid-cols-3 justify-evenly bg-background w-screen h-full pb-48"}>
                         {OsWidget("MacOs", {releases})}
                         {OsWidget("Windows", {releases})}
                         {OsWidget("Linux", {releases})}

@@ -27,11 +27,11 @@ export const getServerSideProps = (async () => {
 
 export default function TeamPage({team_data,} : InferGetServerSidePropsType<typeof getServerSideProps>) {
     return <PageLayout>
-        <div className={"flex justify-evenly"}>
+        <div className={"flex justify-evenly px-2"}>
             <div className={"flex flex-col gap-7"}>
-                <span className={"mt-24 text-oth_yellow text-7xl" }>The Team</span>
+                <span className={"mt-24 text-oth_yellow text-7xl text-center" }>The Team</span>
                 <div className={"flex justify-center"}>
-                    <div className={"grid grid-cols-2 w-fit gap-7"}>
+                    <div className={"grid max-sm:grid-cols-1 grid-cols-2 w-fit gap-7 max-sm:gap-2"}>
                         {GithubCard("Bastien Pinaud","Bastien1533", team_data)}
                         {GithubCard("Louis Gallet","l0u1sg", team_data)}
                         {GithubCard("Titouan Lamy","Drakwrizz", team_data)}
