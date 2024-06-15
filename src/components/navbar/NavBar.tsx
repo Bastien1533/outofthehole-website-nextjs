@@ -43,7 +43,6 @@ export default function NavBar() {
                                 {BarLink("Présentation", "presentation")}
                                 {BarLink("Jouer", "play")}
                                 {BarLink("L'équipe", "team")}
-                                {BarLink("Galerie", "gallery")}
                             </NavigationMenuItem>
                         </NavigationMenuList>
                     </NavigationMenu>
@@ -55,8 +54,8 @@ export default function NavBar() {
                 {BarLink("L'équipe", "team")}
                 {BarLink("Galerie", "gallery")}
             </div>
-        
-                
+
+
     </div>
 }
 
