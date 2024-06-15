@@ -40,19 +40,20 @@ export default function NavBar() {
                             </NavigationMenuItem>
                             <NavigationMenuItem id={"desktop_navbar"}
                                                 className="flex flex-row sm:max-md:gap-2 gap-7 text-oth_yellow max-sm:hidden">
-                                {BarLink("Présentation", "presentation")}
-                                {BarLink("Jouer", "play")}
-                                {BarLink("L'équipe", "team")}
+                                {BarLink("Presentation", "presentation")}
+                                {BarLink("Play", "play")}
+                                {BarLink("The Team", "team")}
+                                {BarLink("Gallery", "gallery")}
                             </NavigationMenuItem>
                         </NavigationMenuList>
                     </NavigationMenu>
                     {GithubRepoCard(org_name, repo_name)}
                 </div>
             <div id={"mobile_navbar"} className="flex flex-row justify-center text-center sm:max-md:gap-2 gap-7 text-oth_yellow" style={{display: "none"}}>
-                {BarLink("Présentation", "presentation")}
-                {BarLink("Jouer", "play")}
-                {BarLink("L'équipe", "team")}
-                {BarLink("Galerie", "gallery")}
+                {BarLink("Presentation", "presentation")}
+                {BarLink("Play", "play")}
+                {BarLink("The Team", "team")}
+                {BarLink("Gallery", "gallery")}
             </div>
 
 
