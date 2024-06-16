@@ -9,17 +9,20 @@ Install the deps:
 ```bash
 npm -i
 ```
+or
+```bash
+npm install
+```
 
 First, run the development server:
 
 ```bash
 npm run dev
 ```
+or
+```bash
+npm run build
+npm run start
+```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-### Todo:
-- Github Api Key Support
-- Dynamic Download link
-- Presentation, News and Gallery Pages
-- Dark Mode (Maybe?)
